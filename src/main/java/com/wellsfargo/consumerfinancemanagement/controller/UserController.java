@@ -3,6 +3,7 @@ package com.wellsfargo.consumerfinancemanagement.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.wellsfargo.consumerfinancemanagement.model.User;
 import com.wellsfargo.consumerfinancemanagement.service.UserService;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController // generate & manage REST API in json format
 @RequestMapping(value="/api")
 public class UserController {
@@ -52,7 +54,12 @@ public class UserController {
 	
 	@PostMapping(value = "/checkUser/{userName}")
 	public String checkUser(@PathVariable("userName") String userName, @RequestBody String password) {
-		String pwd = uservice.findPasswordByuserName(userName);
+		System.out.println("userName " + userName);
+		System.out.println("password "+password);
+		User usr = uservice.findPasswordByuserName(userName);
+		if(usr == null)
+			return "failure";
+		String pwd = usr.getPassword();
 		if(pwd.equals(password))
 			return("success");
 		else
