@@ -16,7 +16,8 @@ export default class CardDashboard extends Component{
             cardLimit: '',
             creditUsed: '', 
             productCount: 10,
-            products:[]
+            products:[],
+            status: 'ACTIVATED'
         }
         this.fetchPurchasedProduct=this.fetchPurchasedProduct.bind(this);
     }
@@ -28,6 +29,9 @@ export default class CardDashboard extends Component{
         })
 
         axios.get("http://localhost:8080/consumerfinancemanagement/api/card/"+this.state.username).then((res) => {
+            if(!res["data"]){
+                this.setState({status: 'PENDING'})
+            }
             this.setState({cardNo:res["data"]["cardNo"]})
             this.setState({cardLimit: res["data"]["cardLimit"]});
             this.setState({cardNo: res["data"]["cardNo"]});
@@ -47,7 +51,6 @@ export default class CardDashboard extends Component{
         const rows = [];
         for (let i = 0; i < this.state.productCount; i++) {
             if(this.state.products[i]){
-                console.log("this.state.products[i]['totalAmount'] ",(this.state.products[i]));
                 rows.push(<tr>
                         <th>{this.state.products[i]["productId"]}</th> 
                         <th>{this.state.products[i]["purchaseDate"].substring(0,10)}</th> 
@@ -86,7 +89,7 @@ export default class CardDashboard extends Component{
                         <p>Username: {this.state.username}</p>
                         <p>Valid till: {this.state.validTill}</p>
                         <p>Card Type: {this.state.cardType}</p>
-                        <p>ACTIVATED</p>
+                        <p>{this.state.status}</p>
                     </div>
                 </div>
                 <div className="amount-details">

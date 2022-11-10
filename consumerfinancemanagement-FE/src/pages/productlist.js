@@ -22,9 +22,7 @@ export default class ProductList extends Component{
         })
 
         axios.get("http://localhost:8080/consumerfinancemanagement/api/product/productDashboard").then((res)=>{
-            this.setState({productCount: res["data"].length}, ()=>{this.setState({productList: res["data"]}, ()=>{
-                this.fetchProductList()
-            })});
+            this.setState({productCount: res["data"].length}, ()=>{this.setState({productList: res["data"]})});
         })
     }
 
